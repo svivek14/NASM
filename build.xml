@@ -1,0 +1,58 @@
+<project name="ANT POC" default="run_test" basedir=".">
+		
+	<target name="remove_folder">
+		<delete dir="./build/bin" />
+		<delete dir="./build/bin/resources" />
+		<delete dir="./build/src.main.java" />
+		<delete dir="./build/src.test.java" />	
+		<delete dir="./build/lib" />
+		<delete dir="./build/test-output" />
+	</target>
+
+	<target name="create_folder" depends="remove_folder">
+		<mkdir dir="./build/bin" />
+		<mkdir dir="./build/bin/resources" />
+		<mkdir dir="./build/src.main.java" />
+		<mkdir dir="./build/src.test.java" />	
+		<mkdir dir="./build/lib" />
+		<mkdir dir="./build/test-output" />
+	</target>
+
+	
+	<target name="copy_files" depends="create_folder">
+		<copydir src="src.main.java" dest="./build/src.main.java"></copydir>
+		<copydir src="src.test.java" dest="./build/src.test.java"></copydir>
+		<copydir src="lib" dest="./build/lib"></copydir>
+			<fileset dir="lib" includes="**/*.jar"></fileset>
+		<copy file="./src.main.java/resources/global.properties" todir="./build/bin/resources/"></copy>
+		<copy file="./src.main.java/resources/testData.properties" todir="./build/bin/resources/"></copy>
+	</target>
+	
+	
+	<path id="cp">
+		<fileset dir="./build/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement location="./build/bin"/>
+	</path>
+	
+	
+	<target name="compile" depends="copy_files">
+		<javac classpathref="cp" srcdir="./build/src.main.java" destdir="./build/bin" includeantruntime="false"></javac>
+		<javac classpathref="cp" srcdir="./build/src.test.java" destdir="./build/bin" includeantruntime="false"></javac>
+	</target>
+	
+	
+	<target name="run_test" depends="compile">
+		<testng outputdir="./build/test-output" classpathref="cp" useDefaultListeners="true" usedefaultlisteners="org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter,listener.TestNGListener"> 
+			<xmlfileset dir="." includes="testng.xml"/>
+		</testng>	
+	</target>
+	
+	<taskdef name="testng" classname="org.testng.TestNGAntTask">
+		<classpath>
+			<pathelement location="./lib/testng-6.9.9.jar"/>
+		</classpath>
+	</taskdef>
+
+</project>

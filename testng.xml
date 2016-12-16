@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Functional Test Suite" parallel="none">
+	<listeners>
+		<listener class-name="org.uncommons.reportng.HTMLReporter"/>
+		<listener class-name="org.uncommons.reportng.JUnitXMLReporter"/>
+		<listener class-name="org.testng.reporters.XMLReporter"/>
+		<listener class-name="listener.TestNGListener"/>
+	</listeners>
+	
+	<test name="ExamFX Smoke Test">
+		<classes>
+			<class name="test.SmokeTest"/>
+		</classes>
+	</test> 
+	 		
+</suite> 
